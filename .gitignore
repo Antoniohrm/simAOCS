@@ -2,3 +2,5 @@ results/
 *.slxc
 *.asv
 *.mexw64
+slprj/
+.DS_Store
