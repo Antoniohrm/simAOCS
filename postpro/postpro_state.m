@@ -15,6 +15,8 @@ else
     isMC = true;
 end
 
+%% Select signals for postpro
+
 signals2plot = { ... 
     'simTime', ... 
     'posEci', ... 
@@ -60,9 +62,9 @@ tabii = 0;
 
 if ~isMC
 
-    dataFolder = strcat('results/', resName, '/sim1/data/');
-
     %% Load variables
+
+    dataFolder = strcat('results/', resName, '/sim1/data/');
 
     for ii = 1:numel(signals2plot)
 
@@ -431,8 +433,8 @@ if ~isMC
     % Plot
 
     geoplot( ... 
-        posLLA(1, :), ... 
-        posLLA(2, :), ... 
+        posLLA(1, :) .* (180 / pi), ... 
+        posLLA(2, :) .* (180 / pi), ... 
         'Color', 'b', ... 
         'LineWidth', 2);
 

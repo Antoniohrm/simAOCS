@@ -29,9 +29,10 @@ initSec = 0; % Second
 % Definition types of the initial conditions
 
 initCondsTypeTranslational = 'OrbitalParametersCircular'; % Circular orbit
+
 initCondsTypeRotational = 'EulerAngles'; % Euler angles (3-2-1/yaw-pitch-roll convention)
 
-% Translational state
+% Translational state - Orbital parameters
 
 initAlt = 500; % Initial orbital altitude [km]
 initInc = 15; % Initial orbital inclination [º]
@@ -58,3 +59,8 @@ initFuelMass = 5; % Initial fuel mass [kg]
 dryMass = 100; % Dry mass of the vehicle [kg]
 dryInertia = 100 .* eye(3); % Inertia tensor of the vehicle without fuel [kgm2]
 fullInertia = 110 .* eye(3); % Inertia tensor of the vehicle with fuel [kgm2]
+
+%% Aerodynamic properties
+
+refSurf = 3; % Reference aerodynamic surface [m2]
+dragCoeff = 2.5; % Drag coefficient (assumed constant) [-]

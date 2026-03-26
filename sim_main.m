@@ -49,11 +49,12 @@ resName0 = 'Res_test'; % Name of the results
 % saveRes = false; % Flag to signal whether to save the simulation results
 saveRes = true; % Flag to signal whether to save the simulation results
 
-owRes = false; % Flag to signal whether to overwrite results if "resName" already exists
+owRes = true; % Flag to signal whether to overwrite results if "resName" already exists
+% owRes = false; % Flag to signal whether to overwrite results if "resName" already exists
 
 % Simulation
 
-simTimeSpan = 60 * 10; % Simulation time span [s]
+simTimeSpan = 60 * 1; % Simulation time span [s]
 
 %% Initialize simulation
 
