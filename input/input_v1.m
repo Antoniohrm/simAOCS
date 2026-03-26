@@ -34,7 +34,7 @@ initCondsTypeRotational = 'EulerAngles'; % Euler angles (3-2-1/yaw-pitch-roll co
 % Translational state
 
 initAlt = 500; % Initial orbital altitude [km]
-initInc = 0; % Initial orbital inclination [º]
+initInc = 15; % Initial orbital inclination [º]
 initRAAN = 0; % Initial orbital right ascension of the ascending node
 initArgPer = 0; % Initial argument of the perigee [º]
 initTrueAnomaly = 0; % Initial true anomaly [º]
