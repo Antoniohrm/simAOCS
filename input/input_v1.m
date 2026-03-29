@@ -138,3 +138,51 @@ rcsMaxMdot = 0.0017; % RCS maximum mass flow rate [kgs-1]
 
 rwInitOmg = ... 
     [0; 0; 0]; % Initial angular velocities of the RW [rpm]
+
+%% Sensors - Gyroscope (GYR)
+
+gyrUpdateFreq = 20; % Reading frequency of the gyroscope [Hz]
+
+gyrMeasLim = 400; % Maximum measurable angular velocity magnitude [ºs-1]
+
+%% Sensors - Star tracker (STR)
+
+strUpdateFreq = 5; % Reading frequency of the star tracker [Hz]
+
+%% Sensors - Magnetometer (MAG)
+
+magUpdateFreq = 5; % Reading frequency of the magnetometer [Hz]
+
+magMeasLim = ... 
+    8; % Maximum measurable magnetic field magnitude per channel [Gauss]
+
+magNoisePerChannel = ... 
+    50; % Maximum MAG noise per channel (3 sigma) [nT]
+
+%% Sensors - Global Navigation Satellite System (GNSS)
+
+gnssUpdateFreq = 2; % Reading frequency of the GNSS receiver [Hz]
+
+gnssHorzAcc = 1.6; % Horizontal accuracy of the GNSS receiver [m]
+gnssVertAcc = 3; % Vertical accuracy of the GNSS receiver [m]
+gnssVelAcc = 0.1; % Velocity accuracy of the GNSS receiver [ms-1]
+
+%% Random error seeds
+% Initialize seeds of random sources for results repeatability
+
+% Sensors - MAG
+
+magNoiseSeed = [23341, 23342, 23343];
+magBiasSeed = [23344, 23345, 23346];
+
+%% GNC
+
+% Mode management
+
+modeIds = { ... 
+    'Standby', 1, ... 
+    'Detumbling', 2, ... 
+    'Desaturation', 3, ... 
+    'Science', 4}; % Mode ids, first column are names (postpro), second column are IDs
+
+initMode = 1;

@@ -143,7 +143,7 @@ if ~isMC
         'DisplayName', 'ECEF');
 
     xlabel('Time [s]', 'Interpreter', 'latex');
-    ylabel('Velocity [$$ms^{-1}$$]', 'Interpreter', 'latex');
+    ylabel('Velocity [$ms^{-1}$]', 'Interpreter', 'latex');
     title('Velocity vs time', 'Interpreter', 'latex');
 
     grid on;
@@ -238,7 +238,7 @@ if ~isMC
         'LineWidth', 2);
 
     xlabel('Time [s]', 'Interpreter', 'latex');
-    ylabel('X velocity [$$ms^{-1}$$]', 'Interpreter', 'latex');
+    ylabel('X velocity [$ms^{-1}$]', 'Interpreter', 'latex');
     title('X velocity vs time', 'Interpreter', 'latex');
 
     grid on;
@@ -259,7 +259,7 @@ if ~isMC
         'LineWidth', 2);
 
     xlabel('Time [s]', 'Interpreter', 'latex');
-    ylabel('Y velocity [$$ms^{-1}$$]', 'Interpreter', 'latex');
+    ylabel('Y velocity [$ms^{-1}$]', 'Interpreter', 'latex');
     title('Y velocity vs time', 'Interpreter', 'latex');
 
     grid on;
@@ -280,7 +280,7 @@ if ~isMC
         'LineWidth', 2);
 
     xlabel('Time [s]', 'Interpreter', 'latex');
-    ylabel('Z velocity [$$ms^{-1}$$]', 'Interpreter', 'latex');
+    ylabel('Z velocity [$ms^{-1}$]', 'Interpreter', 'latex');
     title('Z velocity vs time', 'Interpreter', 'latex');
 
     grid on;
@@ -373,7 +373,7 @@ if ~isMC
         'LineWidth', 2);
 
     xlabel('Time [s]', 'Interpreter', 'latex');
-    ylabel('X velocity [$$ms^{-1}$$]', 'Interpreter', 'latex');
+    ylabel('X velocity [$ms^{-1}$]', 'Interpreter', 'latex');
     title('X velocity vs time', 'Interpreter', 'latex');
 
     grid on;
@@ -394,7 +394,7 @@ if ~isMC
         'LineWidth', 2);
 
     xlabel('Time [s]', 'Interpreter', 'latex');
-    ylabel('Y velocity [$$ms^{-1}$$]', 'Interpreter', 'latex');
+    ylabel('Y velocity [$ms^{-1}$]', 'Interpreter', 'latex');
     title('Y velocity vs time', 'Interpreter', 'latex');
 
     grid on;
@@ -415,7 +415,7 @@ if ~isMC
         'LineWidth', 2);
 
     xlabel('Time [s]', 'Interpreter', 'latex');
-    ylabel('Z velocity [$$ms^{-1}$$]', 'Interpreter', 'latex');
+    ylabel('Z velocity [$ms^{-1}$]', 'Interpreter', 'latex');
     title('Z velocity vs time', 'Interpreter', 'latex');
 
     grid on;
@@ -526,7 +526,7 @@ if ~isMC
         'LineWidth', 2);
 
     xlabel('Time [s]', 'Interpreter', 'latex');
-    ylabel('Roll [$$^{\circ }$$]', 'Interpreter', 'latex');
+    ylabel('Roll [$^{\circ }$]', 'Interpreter', 'latex');
     title('Roll angle vs time', 'Interpreter', 'latex');
 
     grid on;
@@ -547,7 +547,7 @@ if ~isMC
         'LineWidth', 2);
 
     xlabel('Time [s]', 'Interpreter', 'latex');
-    ylabel('Pitch [$$^{\circ }$$]', 'Interpreter', 'latex');
+    ylabel('Pitch [$^{\circ }$]', 'Interpreter', 'latex');
     title('Pitch angle vs time', 'Interpreter', 'latex');
 
     grid on;
@@ -568,7 +568,7 @@ if ~isMC
         'LineWidth', 2);
 
     xlabel('Time [s]', 'Interpreter', 'latex');
-    ylabel('Yaw [$$^{\circ }$$]', 'Interpreter', 'latex');
+    ylabel('Yaw [$^{\circ }$]', 'Interpreter', 'latex');
     title('Yaw angle vs time', 'Interpreter', 'latex');
 
     grid on;
@@ -598,7 +598,7 @@ if ~isMC
         'LineWidth', 2);
 
     xlabel('Time [s]', 'Interpreter', 'latex');
-    ylabel('X angular velocity [$$^{\circ }s^{-1}$$]', 'Interpreter', 'latex');
+    ylabel('X angular velocity [$^{\circ }s^{-1}$]', 'Interpreter', 'latex');
     title('X angular velocity vs time', 'Interpreter', 'latex');
 
     grid on;
@@ -619,7 +619,7 @@ if ~isMC
         'LineWidth', 2);
 
     xlabel('Time [s]', 'Interpreter', 'latex');
-    ylabel('Y angular velocity [$$^{\circ }s^{-1}$$]', 'Interpreter', 'latex');
+    ylabel('Y angular velocity [$^{\circ }s^{-1}$]', 'Interpreter', 'latex');
     title('Y angular velocity vs time', 'Interpreter', 'latex');
 
     grid on;
@@ -640,7 +640,7 @@ if ~isMC
         'LineWidth', 2);
 
     xlabel('Time [s]', 'Interpreter', 'latex');
-    ylabel('Z angular velocity [$$^{\circ }s^{-1}$$]', 'Interpreter', 'latex');
+    ylabel('Z angular velocity [$^{\circ }s^{-1}$]', 'Interpreter', 'latex');
     title('Z angular velocity vs time', 'Interpreter', 'latex');
 
     grid on;
@@ -710,24 +710,24 @@ if ~isMC
         squeeze(inertia(1, 1, :)), ... 
         'm', ... 
         'LineWidth', 3, ... 
-        'DisplayName', '$$I_{xx}$$');
+        'DisplayName', '$I_{xx}$');
 
     plot( ... 
         simTime, ... 
         squeeze(inertia(2, 2, :)), ... 
         'c', ... 
         'LineWidth', 2, ... 
-        'DisplayName', '$$I_{yy}$$');
+        'DisplayName', '$I_{yy}$');
 
     plot( ... 
         simTime, ... 
         squeeze(inertia(3, 3, :)), ... 
         'y', ... 
         'LineWidth', 1, ... 
-        'DisplayName', '$$I_{zz}$$');
+        'DisplayName', '$I_{zz}$');
 
     xlabel('Time [s]', 'Interpreter', 'latex');
-    ylabel('Inertia moment [$$kgm^{2}$$]', 'Interpreter', 'latex');
+    ylabel('Inertia moment [$kgm^{2}$]', 'Interpreter', 'latex');
     title('Inertia vs time', 'Interpreter', 'latex');
 
     grid on;

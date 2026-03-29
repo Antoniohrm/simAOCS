@@ -312,6 +312,46 @@ simData.rcs.rcsMaxMdot = ...
 simData.ic.rwInitOmg = ... 
     rwInitOmg * (pi / 30); % Initial angular velocities of the RW [rads-1]
 
+%% Sensors - Gyroscope (GYR)
+
+simData.gyr.gyrUpdateFreq = ... 
+    gyrUpdateFreq; % Reading frequency of the gyroscope [Hz]
+
+simData.gyr.gyrMeasLim = ... 
+    [(-1 * gyrMeasLim) .* ones(1, 3), ... 
+    gyrMeasLim .* ones(1, 3)] .* ... 
+    (pi / 180); % Maximum measurable angular velocity [rads-1]
+
+%% Sensors - Star tracker (STR)
+
+simData.str.strUpdateFreq = ... 
+    strUpdateFreq; % Reading frequency of the star tracker [Hz]
+
+%% Sensors - Magnetometer (MAG)
+
+simData.mag.magUpdateFreq = ... 
+    magUpdateFreq; % Reading frequency of the magnetometer [Hz]
+
+simData.mag.magMeasLim = ... 
+    magMeasLim * 1e5; % Maximum measurable magnetic field magnitude per channel [nT]
+
+simData.mag.magNoisePerChannel = ... 
+    magNoisePerChannel; % Maximum MAG noise per channel (3 sigma) [nT]
+
+%% Sensors - Global Navigation Satellite System (GNSS)
+
+simData.gnss.gnssUpdateFreq = ... 
+    gnssUpdateFreq; % Reading frequency of the GNSS receiver [Hz]
+
+simData.gnss.gnssHorzAcc = ... 
+    gnssHorzAcc; % Horizontal accuracy of the GNSS receiver [m]
+
+simData.gnss.gnssVertAcc = ... 
+    gnssVertAcc; % Vertical accuracy of the GNSS receiver [m]
+
+simData.gnss.gnssVelAcc = ... 
+    gnssVelAcc; % Velocity accuracy of the GNSS receiver [ms-1]
+
 %% Assemble initial state bus
 % (Must match the field names, dimensions and data types in "state_bus"
 
@@ -329,5 +369,16 @@ simData.ic.initBus = struct( ...
     'inertia', simData.massProperties.fullInertia, ... 
     'timeStampPosix', simData.ic.initTimeUTCPosix, ... 
     'timeStampJulian', simData.ic.initTimeJulian);
+
+%% Random error seeds
+% Initialize seeds of random sources for results repeatability
+
+% Sensors - MAG
+
+simData.randseeds.magNoiseSeed = ... 
+    magNoiseSeed;
+
+simData.rand.seeds.magBiasSeed = ... 
+    magBiasSeed;
 
 end

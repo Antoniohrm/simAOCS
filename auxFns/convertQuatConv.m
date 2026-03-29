@@ -11,7 +11,7 @@
 % Inputs:
 %   - qIn: 4xn or nx4 double array, quaternion(s) to convert
 %   - scalarId: 1x1 double, requested position of the scalar term(s), 
-%               either 0 or 1
+%               either 0 or 4
 %   - normQuat: 1x1 bool, whether to normalize the quaternion(s)
 %
 % Outputs:
