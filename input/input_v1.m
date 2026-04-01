@@ -159,6 +159,10 @@ magMeasLim = ...
 magNoisePerChannel = ... 
     50; % Maximum MAG noise per channel (3 sigma) [nT]
 
+%% Sensors - RW encoders (RWE)
+
+rweUpdateFreq = 20; % Reading frequency of the RWE [Hz]
+
 %% Sensors - Global Navigation Satellite System (GNSS)
 
 gnssUpdateFreq = 2; % Reading frequency of the GNSS receiver [Hz]
@@ -177,12 +181,14 @@ magBiasSeed = [23344, 23345, 23346];
 
 %% GNC
 
-% Mode management
+% Modes
 
 modeIds = { ... 
-    'Standby', 1, ... 
-    'Detumbling', 2, ... 
-    'Desaturation', 3, ... 
-    'Science', 4}; % Mode ids, first column are names (postpro), second column are IDs
+    'Safe', 1, ... 
+    'Desaturation', 2, ... 
+    'Science', 3}; % Mode ids, first column are names (postpro), second column are IDs
 
 initMode = 1;
+
+omgBodSafeTH = 5; % Body angular velocity threshold to trigger safe mode [º-1]
+omgRwDetumblingTH = 0.5; % RW angular velocity threshold to trigger detumbling [º]

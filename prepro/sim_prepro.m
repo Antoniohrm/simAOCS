@@ -352,6 +352,11 @@ simData.gnss.gnssVertAcc = ...
 simData.gnss.gnssVelAcc = ... 
     gnssVelAcc; % Velocity accuracy of the GNSS receiver [ms-1]
 
+%% Sensors - RW encoders (RWE)
+
+simData.rwe.rweUpdateFreq = ... 
+    rweUpdateFreq; % Reading frequency of the RWE [Hz]
+
 %% Assemble initial state bus
 % (Must match the field names, dimensions and data types in "state_bus"
 
