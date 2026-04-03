@@ -61,13 +61,13 @@ initRoll = 0; % Initial roll angle [º]
 initPitch = 0; % Initial pitch angle [º]
 initYaw = 0; % Initial yaw angle [º]
 
-% initOmgX = 0; % Initial angular velocity in X (body) axis [ºs-1]
-% initOmgY = 0; % Initial angular velocity in Y (body) axis [ºs-1]
-% initOmgZ = 0; % Initial angular velocity in Z (body) axis [ºs-1]
+initOmgX = 0; % Initial angular velocity in X (body) axis [ºs-1]
+initOmgY = 0; % Initial angular velocity in Y (body) axis [ºs-1]
+initOmgZ = 0; % Initial angular velocity in Z (body) axis [ºs-1]
 
-initOmgX = 3; % Initial angular velocity in X (body) axis [ºs-1]
-initOmgY = 3; % Initial angular velocity in Y (body) axis [ºs-1]
-initOmgZ = 3; % Initial angular velocity in Z (body) axis [ºs-1]
+% initOmgX = 3; % Initial angular velocity in X (body) axis [ºs-1]
+% initOmgY = 3; % Initial angular velocity in Y (body) axis [ºs-1]
+% initOmgZ = 3; % Initial angular velocity in Z (body) axis [ºs-1]
 
 % initOmgX = 10; % Initial angular velocity in X (body) axis [ºs-1]
 % initOmgY = 10; % Initial angular velocity in Y (body) axis [ºs-1]
@@ -231,3 +231,11 @@ fineNavMode = 2; % Propagate attitude with the gyro measurements between STR upd
 targetID = 1; % Saturn
 % targetID = 2; % Jupiter
 % targetID = 3; % Moon
+
+%% GNC - Control
+
+% Target acquisition
+
+tacqAngThres = 5; % Maximum angular error in either axis to trigger target acquisition [º]
+tacqKp = 0.175; % Proportional gain for the tarque acquisition mode
+tacqKd = 3.5; % Proportional gain for the tarque acquisition mode

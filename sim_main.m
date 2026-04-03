@@ -54,7 +54,7 @@ owRes = true; % Flag to signal whether to overwrite results if "resName" already
 
 % Simulation
 
-simTimeSpan = 60 * 90; % Simulation time span [s]
+simTimeSpan = 60 * 5; % Simulation time span [s]
 % simTimeSpan = 6; % Simulation time span [s]
 
 %% Initialize simulation
