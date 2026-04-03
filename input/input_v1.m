@@ -149,6 +149,8 @@ gyrUpdateFreq = 20; % Reading frequency of the gyroscope [Hz]
 
 gyrMeasLim = 400; % Maximum measurable angular velocity magnitude [ºs-1]
 
+gyrARWperChannel = 0.15; % Angular Random Walk (Allan variance) [ºh^-0.5]
+
 %% Sensors - Star tracker (STR)
 
 strUpdateFreq = 5; % Reading frequency of the star tracker [Hz]
@@ -203,3 +205,11 @@ initMode = 1; % Initial mode
 
 omgBodSafeTH = 15; % Body angular velocity threshold to trigger safe mode [ºs-1]
 omgRwDesaturationTH = 0.5; % RW angular velocity threshold to trigger desaturation [frac of max RW omg]
+
+% Navigation
+
+% Fine navigation algorithm
+% Currently supports only STR and STR + GYR propagation between STR updates
+
+% fineNavMode = 1; % Only update Eci2Body attitude from the STR measurements
+fineNavMode = 2; % Propagate attitude with the gyro measurements between STR updates
