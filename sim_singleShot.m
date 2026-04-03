@@ -70,7 +70,9 @@ tPrepro = toc(preproTimer); % Preprocessing duration [s]
 
 clear('simulationOut'); % Refresh variable
 
-set_param(simModel, 'StopTime', num2str(simTimeSpan)); % Update simulation time span
+set_param(simModel, 'StopTime', num2str(simTimeSpan)); % Simulation time span
+set_param(simModel, 'FixedStep', num2str(simData.sim.simTimeStep)); % Simulation time step
+set_param(simModel, 'SimulationMode', simData.sim.simSimulationMode); % Simulation mode
 
 simulationOut = sim(simModel); % Run the simulation
 
