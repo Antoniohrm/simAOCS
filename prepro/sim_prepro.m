@@ -58,6 +58,19 @@ else
 
 end
 
+%% Random error seeds
+% Initialize seeds of random sources for results repeatability
+
+% Main seed parameters (store for postprocessing purposes)
+
+simData.randSeeds.mainSeed = mainSeed; % Main seed for the simulation
+simData.randSeeds.seedsMax = seedsMax; % Max values for random seeds
+
+% Initialize random number generation with the master seed for solution
+% repeatibility
+
+rng(simData.randSeeds.mainSeed);
+
 %% Initial conditions
 
 simData.ic = struct(); % Preallocate initial conditions
@@ -327,6 +340,17 @@ simData.gyr.gyrMeasLim = ...
 simData.str.strUpdateFreq = ... 
     strUpdateFreq; % Reading frequency of the star tracker [Hz]
 
+simData.str.strNoisePerChannel = ... 
+    (strNoisePerChannel / 3600) * (pi / 180); % Noise per Euler angle (3 sigma) [rad]
+
+simData.str.strBias = ... 
+    (strBiasPerChannel / (3600 * 3)) * ... 
+    rand(1, 3) .* (pi / 180); % Noise bias per Euler angle (3 sigma) [rad]
+
+simData.str.strNoiseSeeds = ... 
+    round(abs(rand(3, 1)) .* ... 
+    simData.randSeeds.seedsMax); % Seeds for the random noise
+
 %% Sensors - Magnetometer (MAG)
 
 simData.mag.magUpdateFreq = ... 
@@ -337,6 +361,10 @@ simData.mag.magMeasLim = ...
 
 simData.mag.magNoisePerChannel = ... 
     magNoisePerChannel; % Maximum MAG noise per channel (3 sigma) [nT]
+
+simData.mag.magNoiseSeeds = ... 
+    round(abs(randn(3, 1)) .* ... 
+    simData.randSeeds.seedsMax); % Seeds for the random noise
 
 %% Sensors - Global Navigation Satellite System (GNSS)
 
@@ -375,15 +403,20 @@ simData.ic.initBus = struct( ...
     'timeStampPosix', simData.ic.initTimeUTCPosix, ... 
     'timeStampJulian', simData.ic.initTimeJulian);
 
-%% Random error seeds
-% Initialize seeds of random sources for results repeatability
+%% GNC
 
-% Sensors - MAG
+% Modes
 
-simData.randseeds.magNoiseSeed = ... 
-    magNoiseSeed;
+simData.gnc.modes.modeIds = ... 
+    modeIds; % Mode identifiers
 
-simData.rand.seeds.magBiasSeed = ... 
-    magBiasSeed;
+simData.gnc.modes.initMode = ... 
+    initMode; % Initial mode
+
+simData.gnc.modes.omgBodSafeTH = ... 
+    omgBodSafeTH * (pi / 180); % Body angular velocity threshold to trigger safe mode [rads-1]
+
+simData.gnc.modes.omgRwDesaturationTH = ... 
+    omgRwDesaturationTH; % RW angular velocity threshold to trigger desaturation [frac of max RW omg]
 
 end

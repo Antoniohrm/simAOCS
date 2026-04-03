@@ -55,9 +55,13 @@ initRoll = 0; % Initial roll angle [º]
 initPitch = 0; % Initial pitch angle [º]
 initYaw = 0; % Initial yaw angle [º]
 
-initOmgX = 0; % Initial angular velocity in X (body) axis [ºs-1]
-initOmgY = 0; % Initial angular velocity in Y (body) axis [ºs-1]
-initOmgZ = 0; % Initial angular velocity in Z (body) axis [ºs-1]
+% initOmgX = 0; % Initial angular velocity in X (body) axis [ºs-1]
+% initOmgY = 0; % Initial angular velocity in Y (body) axis [ºs-1]
+% initOmgZ = 0; % Initial angular velocity in Z (body) axis [ºs-1]
+
+initOmgX = 2; % Initial angular velocity in X (body) axis [ºs-1]
+initOmgY = 2; % Initial angular velocity in Y (body) axis [ºs-1]
+initOmgZ = 2; % Initial angular velocity in Z (body) axis [ºs-1]
 
 % Fuel mass
 
@@ -149,6 +153,10 @@ gyrMeasLim = 400; % Maximum measurable angular velocity magnitude [ºs-1]
 
 strUpdateFreq = 5; % Reading frequency of the star tracker [Hz]
 
+strNoisePerChannel = 20; % Noise per Euler angle (3 sigma) [arcSec]
+
+strBiasPerChannel = 10; % Noise bias per Euler angle (3 sigma) [arcSec]
+
 %% Sensors - Magnetometer (MAG)
 
 magUpdateFreq = 5; % Reading frequency of the magnetometer [Hz]
@@ -157,11 +165,7 @@ magMeasLim = ...
     8; % Maximum measurable magnetic field magnitude per channel [Gauss]
 
 magNoisePerChannel = ... 
-    50; % Maximum MAG noise per channel (3 sigma) [nT]
-
-%% Sensors - RW encoders (RWE)
-
-rweUpdateFreq = 20; % Reading frequency of the RWE [Hz]
+    50; % Noise per channel (3 sigma) [nT]
 
 %% Sensors - Global Navigation Satellite System (GNSS)
 
@@ -171,24 +175,31 @@ gnssHorzAcc = 1.6; % Horizontal accuracy of the GNSS receiver [m]
 gnssVertAcc = 3; % Vertical accuracy of the GNSS receiver [m]
 gnssVelAcc = 0.1; % Velocity accuracy of the GNSS receiver [ms-1]
 
+%% Sensors - RW encoders (RWE)
+
+rweUpdateFreq = 20; % Reading frequency of the RWE [Hz]
+
 %% Random error seeds
 % Initialize seeds of random sources for results repeatability
 
-% Sensors - MAG
+% Main seed generation
 
-magNoiseSeed = [23341, 23342, 23343];
-magBiasSeed = [23344, 23345, 23346];
+mainSeed = 23340; % Main seed for the simulation
+seedsMax = 50000; % Max values for random seeds
 
 %% GNC
 
 % Modes
 
 modeIds = { ... 
-    'Safe', 1, ... 
-    'Desaturation', 2, ... 
-    'Science', 3}; % Mode ids, first column are names (postpro), second column are IDs
+    "Safe", 1; ... 
+    "Desaturation", 2; ... 
+    "Science", 3}; % Mode ids, first column are names (postpro), second column are IDs
 
-initMode = 1;
+% Note: The mode IDs names shall be defined as strings (delimited by "),
+% not as character arrays (delimited by ') for postprocessing purposes
 
-omgBodSafeTH = 5; % Body angular velocity threshold to trigger safe mode [º-1]
-omgRwDetumblingTH = 0.5; % RW angular velocity threshold to trigger detumbling [º]
+initMode = 1; % Initial mode
+
+omgBodSafeTH = 15; % Body angular velocity threshold to trigger safe mode [ºs-1]
+omgRwDesaturationTH = 0.5; % RW angular velocity threshold to trigger desaturation [frac of max RW omg]
