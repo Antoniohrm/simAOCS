@@ -189,27 +189,33 @@ rweUpdateFreq = 20; % Reading frequency of the RWE [Hz]
 mainSeed = 23340; % Main seed for the simulation
 seedsMax = 50000; % Max values for random seeds
 
-%% GNC
+%% GNC - Modes
 
-% Modes
+% Note: The mode IDs names shall be defined as strings (delimited by "),
+% not as character arrays (delimited by ') for postprocessing purposes
 
 modeIds = { ... 
     "Safe", 1; ... 
     "Desaturation", 2; ... 
     "Science", 3}; % Mode ids, first column are names (postpro), second column are IDs
 
-% Note: The mode IDs names shall be defined as strings (delimited by "),
-% not as character arrays (delimited by ') for postprocessing purposes
-
 initMode = 1; % Initial mode
 
 omgBodSafeTH = 15; % Body angular velocity threshold to trigger safe mode [ºs-1]
 omgRwDesaturationTH = 0.5; % RW angular velocity threshold to trigger desaturation [frac of max RW omg]
+omgRwDesaturationEndTH = 0.2; % RW angular velocity threshold to exit desaturation [frac of max RW omg]
 
-% Navigation
+%% GNC - Navigation
 
 % Fine navigation algorithm
 % Currently supports only STR and STR + GYR propagation between STR updates
 
 % fineNavMode = 1; % Only update Eci2Body attitude from the STR measurements
 fineNavMode = 2; % Propagate attitude with the gyro measurements between STR updates
+
+%% GNC - Guidance
+
+% Observation target (select by uncommenting)
+targetID = 1; % Saturn
+% targetID = 2; % Jupiter
+% targetID = 3; % Moon

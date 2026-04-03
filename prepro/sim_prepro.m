@@ -410,9 +410,7 @@ simData.ic.initBus = struct( ...
     'timeStampPosix', simData.ic.initTimeUTCPosix, ... 
     'timeStampJulian', simData.ic.initTimeJulian);
 
-%% GNC
-
-% Modes
+%% GNC - Modes
 
 simData.gnc.modes.modeIds = ... 
     modeIds; % Mode identifiers
@@ -426,10 +424,19 @@ simData.gnc.modes.omgBodSafeTH = ...
 simData.gnc.modes.omgRwDesaturationTH = ... 
     omgRwDesaturationTH; % RW angular velocity threshold to trigger desaturation [frac of max RW omg]
 
-% Navigation
+simData.gnc.modes.omgRwDesaturationEndTH = ... 
+    omgRwDesaturationEndTH; % RW angular velocity threshold to exit desaturation [frac of max RW omg]
+
+%% GNC - Navigation
 
 simData.gnc.nav.fineNavMode = ... 
     fineNavMode; % Fine navigation algorithm
+
+%% GNC - Guidance
+
+simData.gnc.gui.targetID = ... 
+    targetID; % Target to observe identifier
+
 
 
 end
