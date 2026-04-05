@@ -38,8 +38,6 @@ initSec = 0; % Second
 % Definition types of the initial conditions
 
 initCondsTypeTranslational = 'OrbitalParametersCircular'; % Circular orbit defined by the keplerian orbital elements
-% initCondsTypeTranslational = 'LLAIncCirc'; % Inclined, circular orbit defined by latitude, longitude and altitude
-
 initCondsTypeRotational = 'EulerAngles'; % Euler angles (3-2-1/yaw-pitch-roll convention)
 
 % Translational state - Orbital parameters
@@ -49,13 +47,6 @@ initInc = 15; % Initial orbital inclination [º]
 initRAAN = 0; % Initial orbital right ascension of the ascending node
 initArgPer = 0; % Initial argument of the perigee [º]
 initTrueAnomaly = 0; % Initial true anomaly [º]
-
-% Translational state - LLA, inclination
-
-% initAlt = 500; % Initial orbital altitude [km]
-% initInc = 15; % Initial orbital inclination [º]
-% initLat = 10; % Initial latitude [º]
-% initLon = 75; % Initial longitude [º]
 
 % Rotational state
 
@@ -71,13 +62,13 @@ initYaw = 180; % Initial yaw angle [º]
 % initOmgY = 0; % Initial angular velocity in Y (body) axis [ºs-1]
 % initOmgZ = 0; % Initial angular velocity in Z (body) axis [ºs-1]
 
-% initOmgX = 2; % Initial angular velocity in X (body) axis [ºs-1]
-% initOmgY = 2; % Initial angular velocity in Y (body) axis [ºs-1]
-% initOmgZ = 2; % Initial angular velocity in Z (body) axis [ºs-1]
+initOmgX = 2; % Initial angular velocity in X (body) axis [ºs-1]
+initOmgY = 2; % Initial angular velocity in Y (body) axis [ºs-1]
+initOmgZ = 2; % Initial angular velocity in Z (body) axis [ºs-1]
 
-initOmgX = 10; % Initial angular velocity in X (body) axis [ºs-1]
-initOmgY = 10; % Initial angular velocity in Y (body) axis [ºs-1]
-initOmgZ = 10; % Initial angular velocity in Z (body) axis [ºs-1]
+% initOmgX = 10; % Initial angular velocity in X (body) axis [ºs-1]
+% initOmgY = 10; % Initial angular velocity in Y (body) axis [ºs-1]
+% initOmgZ = 10; % Initial angular velocity in Z (body) axis [ºs-1]
 
 % Fuel mass
 
@@ -236,7 +227,6 @@ modeIds = { ...
 initMode = 1; % Initial mode
 
 omgBodSafeTH = 2.15; % Body angular velocity threshold to trigger safe mode [ºs-1]
-% omgBodSafeTH = 1e5; % Body angular velocity threshold to trigger safe mode [ºs-1]
 omgRwDesaturationTH = 0.9; % RW angular velocity threshold to trigger desaturation [frac of max RW omg]
 % omgRwDesaturationTH = 1.1; % RW angular velocity threshold to trigger desaturation [frac of max RW omg]
 omgRwDesaturationEndTH = 0.25; % RW angular velocity threshold to exit desaturation [frac of max RW omg]
@@ -251,67 +241,14 @@ fineNavMode = 2; % Propagate attitude with the gyro measurements between STR upd
 
 %% GNC - Guidance
 
-% Observation target (select by uncommenting)
-targetID = 1; % Saturn
-% targetID = 2; % Jupiter
-% targetID = 3; % Moon
-
-%% GNC - Control - Target acquisition
-
-% tacqAngThres = 5; % Maximum angular error in either axis to trigger target acquisition [º]
-tacqAngThres = 500; % Maximum angular error in either axis to trigger target acquisition [º]
-
-% Gains
-
-% tacqKp = 0.175; % Proportional gain for the target acquisition mode
-% tacqKd = 3.5; % Derivative gain for the target acquisition mode
-
-% tacqKp = 0.05; % Proportional gain for the target acquisition mode
-% tacqKd = 1.9; % Derivative gain for the target acquisition mode
-
-tacqTs = 200; % Settling time of the coarse pointing [s]
-tacqDamping = 1; % Damping ratio of the coarse pointing [-]
+% Observation target
+targetAttEci = [0; 0; 0; 1]; % Attitude w.r.t ECI to track in pointing mode
 
 %% GNC - Control - Fine pointing
 
 % Gains
-% Gain margin: -inf Db @ 0 rads-1
-% Phase margin: 45º @ 5 rads-1
+% Phase margin: 60º @ 50.1 rads-1
 
-% finePointKp = -309.3592; % Proportional gain for the fine pointing
-% finePointKd = -61.8718; % Derivative gain for the fine pointing
-
-% finePointKp = 87.4597645050777;
-% finePointKd = 84.6959167701788;
-% finePointKn = 68.6152619008041; % (Default is 100)
-
-% finePointKp = -0.0349839058020311;
-% finePointKd = -1.69391833540358;
-% finePointKn = 1.37230523801608; % (Default is 100)
-
-finePointKp = 0.0231417031731008; % OK
-finePointKd = 1.73267405547584;
-finePointKn = 11.428279760416; % (Default is 100)
-
-% finePointKp = -0.0231417031731008;
-% finePointKd = 0; % Deactivate derivative term
-% finePointKn = 11.428279760416; % (Default is 100)
-
-% finePointKn = 1; % Placeholder
-% 
-% finePointKp = 0.1969;
-% finePointKd = 2.273;
-% finePointKn = 11;
-
-% finePointKp = 0.0324938710724495;
-finePointKi = 0.000152119336970827;
-% finePointKd = 1.70436171779684;
-% finePointKn = 0.545397025421619; % (Default is 100)
-
-% Gains
-% Gain margin: -inf Db @ 0 rads-1
-% Phase margin: 60º @ 0.1 rads-1
-
-% finePointKp = 0.0875;
-% finePointKd = 1.516;
-% % finePointKd = 0;
+finePointKp = 0.0231417031731008; % Proportional gain
+finePointKd = 1.73267405547584; % Derivative gain
+finePointKn = 11.428279760416; % Filter coefficient
