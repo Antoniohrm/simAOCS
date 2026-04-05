@@ -85,6 +85,11 @@ fullInertia = 17.5 .* eye(3); % Inertia tensor of the vehicle with fuel [kgm2]
 refSurf = 3; % Reference aerodynamic surface [m2]
 dragCoeff = 2.5; % Drag coefficient (assumed constant) [-]
 
+%% External torque disturbances
+% External random torques added in "Dynamics/Forces & Torques"
+
+extPertMag = 3; % Torque of the random external perturbations (3 sigma) [mNm]
+
 %% Actuators - Reaction wheels (RW)
 
 % Allocation matrix (not dependent on the RW specs)
@@ -97,18 +102,18 @@ rwAllocationMatrix = [ ...
 % Specs of CubeSpace CubeWheel CW5000
 % https://www.cubespace.co.za/products/reaction-wheel/
 
-% rwRpm4StoredH = 5200; % Angular velocity at the stored momentum [rpm]
-% rwStoredH = 500; % Stored momentum @ "rwRpm4StoredH" angular velocity [mNms]
-% rwMaxOmg = 8000; % Maximum angular velocity of the RW [rpm]
-% rwMaxTorque = 37; % Maximum torque of the reaction wheels [mNm]
+rwRpm4StoredH = 5200; % Angular velocity at the stored momentum [rpm]
+rwStoredH = 500; % Stored momentum @ "rwRpm4StoredH" angular velocity [mNms]
+rwMaxOmg = 8000; % Maximum angular velocity of the RW [rpm]
+rwMaxTorque = 37; % Maximum torque of the reaction wheels [mNm]
 
 % Specs of CubeSpace CubeWheel CW10K0 (extrapolating from smaller models)
 % https://www.cubespace.co.za/products/reaction-wheel/
 
-rwRpm4StoredH = 5200; % Angular velocity at the stored momentum [rpm]
-rwStoredH = 1000; % Stored momentum @ "rwRpm4StoredH" angular velocity [mNms]
-rwMaxOmg = 8000; % Maximum angular velocity of the RW [rpm]
-rwMaxTorque = 50; % Maximum torque of the reaction wheels [mNm]
+% rwRpm4StoredH = 5200; % Angular velocity at the stored momentum [rpm]
+% rwStoredH = 1000; % Stored momentum @ "rwRpm4StoredH" angular velocity [mNms]
+% rwMaxOmg = 8000; % Maximum angular velocity of the RW [rpm]
+% rwMaxTorque = 50; % Maximum torque of the reaction wheels [mNm]
 
 %% Actuators - Magnetorquers (MTQ)
 % Specs of CubeSpace CubeTorquer CR0200
@@ -226,7 +231,7 @@ modeIds = { ...
 
 initMode = 1; % Initial mode
 
-omgBodSafeTH = 2.15; % Body angular velocity threshold to trigger safe mode [ºs-1]
+omgBodSafeTH = 3; % Body angular velocity threshold to trigger safe mode [ºs-1]
 omgRwDesaturationTH = 0.9; % RW angular velocity threshold to trigger desaturation [frac of max RW omg]
 % omgRwDesaturationTH = 1.1; % RW angular velocity threshold to trigger desaturation [frac of max RW omg]
 omgRwDesaturationEndTH = 0.25; % RW angular velocity threshold to exit desaturation [frac of max RW omg]
@@ -243,6 +248,10 @@ fineNavMode = 2; % Propagate attitude with the gyro measurements between STR upd
 
 % Observation target
 targetAttEci = [0; 0; 0; 1]; % Attitude w.r.t ECI to track in pointing mode
+
+%% GNC - Desaturation
+
+desatK = 1e5; % Gain for the Bdot desaturation law
 
 %% GNC - Control - Fine pointing
 

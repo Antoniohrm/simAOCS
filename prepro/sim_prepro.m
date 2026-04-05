@@ -260,6 +260,15 @@ simData.aero.refSurf = ...
 simData.aero.dragCoeff = ... 
     dragCoeff; % Drag coefficient (assumed constant) [-]
 
+%% External torque disturbances
+
+simData.pert.extPertMag = ... 
+    extPertMag * 1e-3; % Torque of the random external perturbations (3 sigma) [mNm]
+
+simData.pert.pertNoiseSeeds = ... 
+    round(abs(rand(3, 1)) .* ... 
+    simData.randSeeds.seedsMax); % Seeds for the random perturbations
+
 %% Actuators - Reaction wheels (RW)
 % All wheels assumed to have the same specs
 
@@ -489,6 +498,11 @@ simData.gnc.act.rwMaxTorque = ...
 
 simData.gnc.act.rwMaxOmg = ... 
     (rwMaxOmg * (pi / 30)) .* ones(3, 1); % Maximum angular velocity of the RW (column vector) [rads-1]
+
+%% GNC - Control - Desaturation
+
+simData.gnc.con.desatK = ... 
+    desatK; % Gain for the Bdot desaturation law
 
 %% GNC - Control - Fine pointing
 
