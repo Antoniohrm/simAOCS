@@ -7,6 +7,8 @@
 
 simTimeStep = 0.05; % Simulator time-step
 simSimulationMode = 'Normal'; % Simulation mode
+% simSimulationMode = 'Accelerator'; % Simulation mode
+
 
 %% Constants
 
@@ -57,21 +59,25 @@ initTrueAnomaly = 0; % Initial true anomaly [º]
 
 % Rotational state
 
-initRoll = 0; % Initial roll angle [º]
-initPitch = 0; % Initial pitch angle [º]
-initYaw = 0; % Initial yaw angle [º]
+% initRoll = 2; % Initial roll angle [º]
+% initPitch = 2; % Initial pitch angle [º]
+% initYaw = 2; % Initial yaw angle [º]
+
+initRoll = 45; % Initial roll angle [º]
+initPitch = 45; % Initial pitch angle [º]
+initYaw = 180; % Initial yaw angle [º]
 
 % initOmgX = 0; % Initial angular velocity in X (body) axis [ºs-1]
 % initOmgY = 0; % Initial angular velocity in Y (body) axis [ºs-1]
 % initOmgZ = 0; % Initial angular velocity in Z (body) axis [ºs-1]
 
-initOmgX = 1; % Initial angular velocity in X (body) axis [ºs-1]
-initOmgY = 1; % Initial angular velocity in Y (body) axis [ºs-1]
-initOmgZ = 1; % Initial angular velocity in Z (body) axis [ºs-1]
+% initOmgX = 2; % Initial angular velocity in X (body) axis [ºs-1]
+% initOmgY = 2; % Initial angular velocity in Y (body) axis [ºs-1]
+% initOmgZ = 2; % Initial angular velocity in Z (body) axis [ºs-1]
 
-% initOmgX = 10; % Initial angular velocity in X (body) axis [ºs-1]
-% initOmgY = 10; % Initial angular velocity in Y (body) axis [ºs-1]
-% initOmgZ = 10; % Initial angular velocity in Z (body) axis [ºs-1]
+initOmgX = 10; % Initial angular velocity in X (body) axis [ºs-1]
+initOmgY = 10; % Initial angular velocity in Y (body) axis [ºs-1]
+initOmgZ = 10; % Initial angular velocity in Z (body) axis [ºs-1]
 
 % Fuel mass
 
@@ -97,9 +103,8 @@ rwAllocationMatrix = [ ...
     0, 1, 0; ... 
     0, 0, 1]; % RW allocation matrix (All three aligned with principal body axes)
 
-
-% % Specs of CubeSpace CubeWheel CW5000
-% % https://www.cubespace.co.za/products/reaction-wheel/
+% Specs of CubeSpace CubeWheel CW5000
+% https://www.cubespace.co.za/products/reaction-wheel/
 
 % rwRpm4StoredH = 5200; % Angular velocity at the stored momentum [rpm]
 % rwStoredH = 500; % Stored momentum @ "rwRpm4StoredH" angular velocity [mNms]
@@ -230,9 +235,10 @@ modeIds = { ...
 
 initMode = 1; % Initial mode
 
-% omgBodSafeTH = 15; % Body angular velocity threshold to trigger safe mode [ºs-1]
-omgBodSafeTH = 25; % Body angular velocity threshold to trigger safe mode [ºs-1]
+omgBodSafeTH = 2.15; % Body angular velocity threshold to trigger safe mode [ºs-1]
+% omgBodSafeTH = 1e5; % Body angular velocity threshold to trigger safe mode [ºs-1]
 omgRwDesaturationTH = 0.9; % RW angular velocity threshold to trigger desaturation [frac of max RW omg]
+% omgRwDesaturationTH = 1.1; % RW angular velocity threshold to trigger desaturation [frac of max RW omg]
 omgRwDesaturationEndTH = 0.25; % RW angular velocity threshold to exit desaturation [frac of max RW omg]
 
 %% GNC - Navigation
@@ -252,14 +258,18 @@ targetID = 1; % Saturn
 
 %% GNC - Control - Target acquisition
 
-tacqAngThres = 5; % Maximum angular error in either axis to trigger target acquisition [º]
+% tacqAngThres = 5; % Maximum angular error in either axis to trigger target acquisition [º]
+tacqAngThres = 500; % Maximum angular error in either axis to trigger target acquisition [º]
 
 % Gains
 
 % tacqKp = 0.175; % Proportional gain for the target acquisition mode
 % tacqKd = 3.5; % Derivative gain for the target acquisition mode
 
-tacqTs = 100; % Settling time of the coarse pointing [s]
+% tacqKp = 0.05; % Proportional gain for the target acquisition mode
+% tacqKd = 1.9; % Derivative gain for the target acquisition mode
+
+tacqTs = 200; % Settling time of the coarse pointing [s]
 tacqDamping = 1; % Damping ratio of the coarse pointing [-]
 
 %% GNC - Control - Fine pointing
@@ -268,5 +278,40 @@ tacqDamping = 1; % Damping ratio of the coarse pointing [-]
 % Gain margin: -inf Db @ 0 rads-1
 % Phase margin: 45º @ 5 rads-1
 
-finePointKp = -309.3592; % Proportional gain for the fine pointing
-finePointKd = -61.8718; % Derivative gain for the fine pointing
+% finePointKp = -309.3592; % Proportional gain for the fine pointing
+% finePointKd = -61.8718; % Derivative gain for the fine pointing
+
+% finePointKp = 87.4597645050777;
+% finePointKd = 84.6959167701788;
+% finePointKn = 68.6152619008041; % (Default is 100)
+
+% finePointKp = -0.0349839058020311;
+% finePointKd = -1.69391833540358;
+% finePointKn = 1.37230523801608; % (Default is 100)
+
+finePointKp = 0.0231417031731008; % OK
+finePointKd = 1.73267405547584;
+finePointKn = 11.428279760416; % (Default is 100)
+
+% finePointKp = -0.0231417031731008;
+% finePointKd = 0; % Deactivate derivative term
+% finePointKn = 11.428279760416; % (Default is 100)
+
+% finePointKn = 1; % Placeholder
+% 
+% finePointKp = 0.1969;
+% finePointKd = 2.273;
+% finePointKn = 11;
+
+% finePointKp = 0.0324938710724495;
+finePointKi = 0.000152119336970827;
+% finePointKd = 1.70436171779684;
+% finePointKn = 0.545397025421619; % (Default is 100)
+
+% Gains
+% Gain margin: -inf Db @ 0 rads-1
+% Phase margin: 60º @ 0.1 rads-1
+
+% finePointKp = 0.0875;
+% finePointKd = 1.516;
+% % finePointKd = 0;
