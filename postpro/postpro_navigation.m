@@ -1,5 +1,5 @@
 %
-% Postpro of the navigation functions
+% Postpro of the navigation function
 %
 
 function [] = postpro_navigation(resName)

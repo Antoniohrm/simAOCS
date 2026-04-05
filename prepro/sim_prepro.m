@@ -287,15 +287,23 @@ simData.aero.dragCoeff = ...
     dragCoeff; % Drag coefficient (assumed constant) [-]
 
 %% Actuators - Reaction wheels (RW)
+% All wheels assumed to have the same specs
 
 simData.rw.rwAllocationMatrix = ... 
     rwAllocationMatrix; % RW allocation matrix
 
 simData.rw.rwInertia = ... 
-    rwInertia .* ones(3, 1); % Inertia moment of the RWs around their rotation axis (column vector) [kgm2]
+    ((rwStoredH .* 1e-3) / ... 
+    (rwRpm4StoredH * (pi / 30))) .* ... 
+    ones(size(simData.rw.rwAllocationMatrix, 2), 1); % Inertia moment of the RWs around their rotation axis (column vector) [kgm2]
 
 simData.rw.rwMaxOmg = ... 
-    (rwMaxOmg * (pi / 30)) .* ones(3, 1); % Maximum angular velocity of the RW (column vector) [rads-1]
+    (rwMaxOmg * (pi / 30)) .* ... 
+    ones(size(simData.rw.rwAllocationMatrix, 2), 1); % Maximum angular velocity of the RW (column vector) [rads-1]
+
+simData.rw.rwMaxTorque = ... 
+    (rwMaxTorque * 1e-3) .* ... 
+    ones(size(simData.rw.rwAllocationMatrix, 2), 1); % Maximum torque of the reaction wheels [Nm]
 
 %% Actuators - Magnetorquers (MTQ)
 
@@ -456,11 +464,23 @@ simData.gnc.nav.fineNavMode = ...
 simData.gnc.gui.targetID = ... 
     targetID; % Target to observe identifier
 
-%% GNC - Control
-
-% Actuator parameters
-% The actuator parameters are duplicated in the simData structure to enable
+%% GNC - Control - Vehicle parameters
+% The vehicle parameters are duplicated in the simData structure to enable
 % the deviation from nominal values in the dynamics without GNC knowledge
+
+% Mass properties
+
+simData.gnc.massProperties.dryMass = ... 
+    dryMass; % Dry mass of the vehicle [kg]
+
+simData.gnc.massProperties.fullMass = ... 
+    simData.massProperties.dryMass + initFuelMass; % Full vehicle mass [kg]
+
+simData.gnc.massProperties.dryInertia = ... 
+    dryInertia; % Inertia tensor of the vehicle without fuel [kgm2]
+
+simData.gnc.massProperties.fullInertia = ... 
+    fullInertia; % Inertia tensor of the vehicle with fuel [kgm2]
 
 % MTQ
 
@@ -487,23 +507,55 @@ simData.gnc.act.rwAllocationMatrix = ...
     rwAllocationMatrix; % RW allocation matrix
 
 simData.gnc.act.rwInertia = ... 
-    rwInertia .* ones(3, 1); % Inertia moment of the RWs around their rotation axis (column vector) [kgm2]
+    simData.rw.rwInertia .* ones(3, 1); % Inertia moment of the RWs around their rotation axis (column vector) [kgm2]
+
+simData.gnc.act.rwMaxTorque = ... 
+    (rwMaxTorque * 1e-3) .* ... 
+    ones(size(simData.gnc.act.rwAllocationMatrix, 2), 1); % Maximum torque of the reaction wheels [Nm]
 
 simData.gnc.act.rwMaxOmg = ... 
     (rwMaxOmg * (pi / 30)) .* ones(3, 1); % Maximum angular velocity of the RW (column vector) [rads-1]
 
-
-% Target acquisition
+%% GNC - Control - Target acquisition
 
 simData.gnc.con.tacqAngThres = ... 
     tacqAngThres * (pi / 180); % Maximum angular error in either axis to trigger target acquisition [rad]
 
+% Gains computing
+
+simData.gnc.con.tacqTs = ... 
+    tacqTs; % Settling time of the coarse pointing [s]
+
+simData.gnc.con.tacqDamping = ... 
+    tacqDamping; % Damping ratio of the coarse pointing [-]
+
+simData.gnc.con.tacqOmgN = ... 
+    4 / simData.gnc.con.tacqTs;
+
 simData.gnc.con.tacqKp = ... 
-    tacqKp; % Proportional gain for the tarque acquisition mode
+    (simData.gnc.con.tacqOmgN ^ 2) .* ... 
+    max(max(simData.gnc.massProperties.fullInertia)); % Proportional gain for the target acquisition mode
 
 simData.gnc.con.tacqKd = ... 
-    tacqKd; % Proportional gain for the tarque acquisition mode
+    (2 * simData.gnc.con.tacqDamping) * ... 
+    sqrt(simData.gnc.con.tacqKp * ... 
+    max(max(simData.gnc.massProperties.fullInertia))); % Derivative gain for the target acquisition mode
 
+% simData.gnc.con.tacqKp = ... 
+%     tacqKp; % Proportional gain for the target acquisition mode
+% 
+% simData.gnc.con.tacqKd = ... 
+%     tacqKd; % Derivative gain for the target acquisition mode
+
+%% GNC - Control - Fine pointing
+
+% Gains
+
+simData.gnc.con.finePointKp = ... 
+    finePointKp; % Proportional gain for the fine pointing
+
+simData.gnc.con.finePointKd = ... 
+    finePointKd; % Derivative gain for the fine pointing
 
 %% Assemble initial state bus
 % (Must match the field names, dimensions and data types in "state_bus"
