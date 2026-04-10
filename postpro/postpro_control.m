@@ -39,8 +39,6 @@ signals2plot = { ...
 fig = figure('Name', 'Control postpro');
 
 tabNames = { ... 
-    'Detumbling', ... 
-    'Desaturation', ... 
     'Pointing'};
 
 tabGroup = uitabgroup;
@@ -94,34 +92,6 @@ if ~isMC
     
     tPoint = simTime(idPoint); % Time vector when pointing mode is enabled
 
-    %% Detumbling
-    
-    % Switch figure
-
-    tabii = tabii + 1;
-    axes('Parent', tabs{tabii});
-    
-
-    if ~isempty(idDetumb)
-
-        % Plot
-
-    end
-
-    %% Desaturation
-
-    % Switch figure
-
-    tabii = tabii + 1;
-    axes('Parent', tabs{tabii});
-    
-
-    if ~isempty(idDesat)
-
-        % Plot
-
-    end
-
     %% Pointing
 
     % Switch figure
@@ -139,7 +109,35 @@ if ~isMC
         % Plot setup
 
         spNRows = 3; % Number of subplot rows
-        spNCols = 1; % Number of subplot rows
+        spNCols = 1; % Number of subplot columns
+
+        % Error legends
+
+        [errorRollArcSecNO, ~] = ... 
+            rmoutliers((errorRoll .* (180 / pi)) .* 3600); % Remove outliers ['']
+
+        errRollLeg = sprintf( ... 
+            "$\\bar{\\Delta \\phi}$: %5.3f '', $\\sigma _{\\Delta \\phi}$: %5.3f ''", ... 
+            mean(errorRollArcSecNO), ... 
+            std(errorRollArcSecNO)); % Legend for the roll error plot
+
+        [errorPitchArcSecNO, ~] = ... 
+            rmoutliers((errorPitch .* (180 / pi)) .* 3600); % Remove outliers ['']
+
+        errPitchLeg = sprintf( ... 
+            "$\\bar{\\Delta \\theta}$: %5.3f '', $\\sigma _{\\Delta \\theta}$: %5.3f ''", ... 
+            mean(errorPitchArcSecNO), ... 
+            std(errorPitchArcSecNO)); % Legend for the pitch error plot
+
+        [errorYawArcSecNO, ~] = ... 
+            rmoutliers((errorYaw .* (180 / pi)) .* 3600); % Remove outliers ['']
+
+        errYawLeg = sprintf( ... 
+            "$\\bar{\\Delta \\psi}$: %5.3f '', $\\sigma _{\\Delta \\psi}$: %5.3f ''", ... 
+            mean(errorYawArcSecNO), ... 
+            std(errorYawArcSecNO)); % Legend for the yaw error plot
+
+
         
         % Plotting data information (Time assumed to be in the X axis)
 
@@ -203,9 +201,9 @@ if ~isMC
             'Commanded', 'Real'; ... 
             'Commanded', 'Real'; ... 
             'Commanded', 'Real'; ... 
-            'none', 'none'; ... 
-            'none', 'none'; ... 
-            'none', 'none';}; % Legends of the plotted variables
+            errRollLeg, 'none'; ... 
+            errPitchLeg, 'none'; ... 
+            errYawLeg, 'none';}; % Legends of the plotted variables
 
         dataSubplotId = { ... 
             1, ... 
@@ -244,6 +242,8 @@ if ~isMC
 
             end
 
+            xlim([min(simTime), max(simTime)]);
+
             tStr = sprintf('%s vs time', dataName{ii});
             yStr = sprintf('%s [%s]', dataSymbol{ii}, dataUnits{ii});
             
@@ -256,7 +256,7 @@ if ~isMC
 
             hold off;
 
-            if ~strcmpi(dataVar{ii, 2}, 'none')
+            if ~strcmpi(dataVar{ii, 1}, 'none')
                 legend('Interpreter', 'latex');
             end
 

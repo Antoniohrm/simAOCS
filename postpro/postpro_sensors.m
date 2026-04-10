@@ -31,7 +31,8 @@ signals2plot = { ...
     'posEcef', ...
     'velEcef', ... 
     'posLLA', ... 
-    'magFieldEci'};
+    'magFieldEci', ... 
+    'gncMode'};
 
 %% Initialize figure
 
@@ -85,6 +86,10 @@ if ~isMC
         '/sim1/simInput/simData.mat');
 
     load(inpDataFile, 'simData');
+
+    %% Identify instants when the fine navigation is running
+    
+    idFine = find(gncMode == 2 | gncMode == 3);
 
     %% Gyroscope
     
@@ -449,7 +454,257 @@ if ~isMC
 
     % Plot
     
-    % (Plot 1 description)
+    if ~isempty(idFine)
+
+        % Calculate Euler angles
+    
+        q0 = convertQuatConv(attEci2Bod', 0) ; % Switch to q0 convention
+        eulerAngles = quat2eul(q0, "ZYX");
+        eulerAngles = eulerAngles'; % Stack by columns (quat2eul takes stacked by columns)
+    
+        q0STR = convertQuatConv(qEci2BodSTR', 0) ; % Switch to q0 convention
+        eulerAnglesSTR = quat2eul(q0STR, "ZYX");
+        eulerAnglesSTR = eulerAnglesSTR'; % Stack by columns (quat2eul takes stacked by columns)
+        
+        % Roll
+    
+        subplot(3, 2, 1);
+    
+        hold on;
+    
+        plot( ... 
+            simTime(idFine), ... 
+            eulerAnglesSTR(1, idFine) .* (180 / pi), ... 
+            'Color', 'g', ... 
+            'LineStyle', '-', ... 
+            'LineWidth', 1.5, ... 
+            'DisplayName', 'Measured');
+    
+        plot( ... 
+            simTime(idFine), ... 
+            eulerAngles(1, idFine) .* (180 / pi), ... 
+            'Color', 'r', ... 
+            'LineStyle', ':', ... 
+            'LineWidth', 3.5, ... 
+            'DisplayName', 'Real');
+
+        xlim([min(simTime), max(simTime)]);
+    
+        xlabel('Time [s]', 'Interpreter', 'latex');
+        ylabel('$\phi $ [$^{\circ }$]', 'Interpreter', 'latex');
+        title('Roll angle vs time', 'Interpreter', 'latex');
+    
+        grid on;
+        grid minor;
+    
+        hold off;
+    
+        legend('Interpreter', 'latex');
+    
+        % Roll measurement error
+    
+        % Compute error & statistics
+    
+        angErr = ... 
+            (eulerAngles(1, idFine) - ... 
+            eulerAnglesSTR(1, idFine)) .* ... 
+            (180 / pi) .* 3600; % ['']
+
+        [angErrNO, ~] = rmoutliers(angErr);
+    
+        errLeg = sprintf( ... 
+            "$\\bar{\\Delta \\phi}$: %5.3f '', $\\sigma _{\\Delta \\phi}$: %5.3f ''", ... 
+            mean(angErrNO), ... 
+            std(angErrNO));
+    
+        subplot(3, 2, 2);
+    
+        hold on;
+    
+        plot( ... 
+            simTime(idFine), ... 
+            (eulerAngles(1, idFine) - eulerAnglesSTR(1, idFine)) .* (180 / pi), ... 
+            'Color', 'b', ... 
+            'LineStyle', '-', ... 
+            'LineWidth', 2, ... 
+            'DisplayName', errLeg);
+    
+        % Set axes range to display the error only when the fine navigation is 
+        % running
+        xlim([min(simTime), max(simTime)]);
+        ylim([min(angErr ./ 3600), max(angErr ./ 3600)]);
+    
+        xlabel('Time [s]', 'Interpreter', 'latex');
+        ylabel('$\Delta \phi $ [$^{\circ }$]', 'Interpreter', 'latex');
+        title('Roll angle measurement error vs time', 'Interpreter', 'latex');
+    
+        grid on;
+        grid minor;
+    
+        hold off;
+    
+        legend('Interpreter', 'latex');
+        
+        % Pitch
+    
+        subplot(3, 2, 3);
+    
+        hold on;
+    
+        plot( ... 
+            simTime(idFine), ... 
+            eulerAnglesSTR(2, idFine) .* (180 / pi), ... 
+            'Color', 'g', ... 
+            'LineStyle', '-', ... 
+            'LineWidth', 1.5, ... 
+            'DisplayName', 'Measured');
+    
+        plot( ... 
+            simTime(idFine), ... 
+            eulerAngles(2, idFine) .* (180 / pi), ... 
+            'Color', 'r', ... 
+            'LineStyle', ':', ... 
+            'LineWidth', 3.5, ... 
+            'DisplayName', 'Real');
+
+        xlim([min(simTime), max(simTime)]);
+    
+        xlabel('Time [s]', 'Interpreter', 'latex');
+        ylabel('$\theta $ [$^{\circ }$]', 'Interpreter', 'latex');
+        title('Pitch angle vs time', 'Interpreter', 'latex');
+    
+        grid on;
+        grid minor;
+    
+        hold off;
+    
+        legend('Interpreter', 'latex');
+    
+        % Pitch measurement error
+    
+        % Compute error & statistics
+    
+        angErr = ... 
+            (eulerAngles(2, idFine) - ... 
+            eulerAnglesSTR(2, idFine)) .* ... 
+            (180 / pi) .* 3600; % ['']
+
+        [angErrNO, ~] = rmoutliers(angErr);
+    
+        errLeg = sprintf( ... 
+            "$\\bar{\\Delta \\theta}$: %5.3f '', $\\sigma _{\\Delta \\theta}$: %5.3f ''", ... 
+            mean(angErrNO), ... 
+            std(angErrNO));
+    
+        subplot(3, 2, 4);
+    
+        hold on;
+    
+        plot( ... 
+            simTime(idFine), ... 
+            (eulerAngles(2, idFine) - eulerAnglesSTR(2, idFine)) .* (180 / pi), ... 
+            'Color', 'b', ... 
+            'LineStyle', '-', ... 
+            'LineWidth', 2, ... 
+            'DisplayName', errLeg);
+    
+        % Set axes range to display the error only when the fine navigation is 
+        % running
+        xlim([min(simTime), max(simTime)]);
+        ylim([min(angErr ./ 3600), max(angErr ./ 3600)]);
+    
+        xlabel('Time [s]', 'Interpreter', 'latex');
+        ylabel('$\Delta \theta $ [$^{\circ }$]', 'Interpreter', 'latex');
+        title('Pitch angle measurement error vs time', 'Interpreter', 'latex');
+    
+        grid on;
+        grid minor;
+    
+        hold off;
+    
+        legend('Interpreter', 'latex');
+    
+        % Yaw
+    
+        subplot(3, 2, 5);
+    
+        hold on;
+    
+        plot( ... 
+            simTime(idFine), ... 
+            eulerAnglesSTR(3, idFine) .* (180 / pi), ... 
+            'Color', 'g', ... 
+            'LineStyle', '-', ... 
+            'LineWidth', 1.5, ... 
+            'DisplayName', 'Measured');
+    
+        plot( ... 
+            simTime(idFine), ... 
+            eulerAngles(3, idFine) .* (180 / pi), ... 
+            'Color', 'r', ... 
+            'LineStyle', ':', ... 
+            'LineWidth', 3.5, ... 
+            'DisplayName', 'Real');
+
+        xlim([min(simTime), max(simTime)]);
+    
+        xlabel('Time [s]', 'Interpreter', 'latex');
+        ylabel('$\psi $ [$^{\circ }$]', 'Interpreter', 'latex');
+        title('Yaw angle vs time', 'Interpreter', 'latex');
+    
+        grid on;
+        grid minor;
+    
+        hold off;
+    
+        legend('Interpreter', 'latex');
+    
+        % Yaw measurement error
+    
+        % Compute error & statistics
+    
+        angErr = ... 
+            (eulerAngles(3, idFine) - ... 
+            eulerAnglesSTR(3, idFine)) .* ... 
+            (180 / pi) .* 3600; % ['']
+
+        [angErrNO, ~] = rmoutliers(angErr);
+    
+        errLeg = sprintf( ... 
+            "$\\bar{\\Delta \\psi}$: %5.3f '', $\\sigma _{\\Delta \\psi}$: %5.3f ''", ... 
+            mean(angErrNO), ... 
+            std(angErrNO));
+    
+        subplot(3, 2, 6);
+    
+        hold on;
+    
+        plot( ... 
+            simTime(idFine), ... 
+            (eulerAngles(3, idFine) - eulerAnglesSTR(3, idFine)) .* (180 / pi), ... 
+            'Color', 'b', ... 
+            'LineStyle', '-', ... 
+            'LineWidth', 2, ... 
+            'DisplayName', errLeg);
+    
+        % Set axes range to display the error only when the fine navigation is 
+        % running
+        xlim([min(simTime), max(simTime)]);
+        ylim([min(angErr ./ 3600), max(angErr ./ 3600)]);
+    
+        xlabel('Time [s]', 'Interpreter', 'latex');
+        ylabel('$\Delta \psi$ [$^{\circ }$]', 'Interpreter', 'latex');
+        title('Yaw angle measurement error vs time', 'Interpreter', 'latex');
+    
+        grid on;
+        grid minor;
+    
+        hold off;
+    
+        legend('Interpreter', 'latex');
+
+    end
+
 
     %% GNSS
     
@@ -458,212 +713,228 @@ if ~isMC
     tabii = tabii + 1;
     axes('Parent', tabs{tabii});
 
-    % Convert LLA signals to degrees and km
+    if ~isempty(idFine)
 
-    llaRealDegKm = [ ... 
-        posLLA(1:2, :) .* (180 / pi); ... 
-        posLLA(3, :) .* 1e-3];
-
-    llaMeasDegKm = [ ... 
-        llaGNSS(1:2, :) .* (180 / pi); ... 
-        llaGNSS(3, :) .* 1e-3];
-
-    % Plot
+        % Convert LLA signals to degrees and km
     
-    % Latitude
-
-    subplot(3, 4, 1);
-
-    hold on;
-
-    plot( ... 
-        simTime, ... 
-        llaRealDegKm(1, :), ... 
-        'Color', 'r', ... 
-        'LineStyle', ':', ... 
-        'LineWidth', 3.5, ... 
-        'DisplayName', 'Real');
-
-    plot( ... 
-        simTime, ... 
-        llaMeasDegKm (1, :), ... 
-        'Color', 'g', ... 
-        'LineStyle', '-', ... 
-        'LineWidth', 1.5, ... 
-        'DisplayName', 'Measured');
-
-    xlabel('Time [s]', 'Interpreter', 'latex');
-    ylabel('Latitude [$^{\circ }$]', 'Interpreter', 'latex');
-    title('Latitude vs time', 'Interpreter', 'latex');
-
-    grid on;
-    grid minor;
-
-    hold off;
-
-    legend('Interpreter', 'latex');
-
-    % Latitude measurement error
-
-    subplot(3, 4, 2);
-
-    hold on;
-
-    plot( ... 
-        simTime, ... 
-        abs(llaMeasDegKm(1, :) - llaRealDegKm(1, :)), ... 
-        'Color', 'b', ... 
-        'LineStyle', ':', ... 
-        'LineWidth', 2);
-
-    xlabel('Time [s]', 'Interpreter', 'latex');
-    ylabel('$\Delta $ Latitude [$^{\circ }$]', 'Interpreter', 'latex');
-    title('Latitude measurement error vs time', 'Interpreter', 'latex');
-
-    grid on;
-    grid minor;
-
-    hold off;
-
-    % Longitude
-
-    subplot(3, 4, 5);
-
-    hold on;
-
-    plot( ... 
-        simTime, ... 
-        llaRealDegKm(2, :), ... 
-        'Color', 'r', ... 
-        'LineStyle', ':', ... 
-        'LineWidth', 3.5, ... 
-        'DisplayName', 'Real');
-
-    plot( ... 
-        simTime, ... 
-        llaMeasDegKm (2, :), ... 
-        'Color', 'g', ... 
-        'LineStyle', '-', ... 
-        'LineWidth', 1.5, ... 
-        'DisplayName', 'Measured');
-
-    xlabel('Time [s]', 'Interpreter', 'latex');
-    ylabel('Longitude [$^{\circ }$]', 'Interpreter', 'latex');
-    title('Longitude vs time', 'Interpreter', 'latex');
-
-    grid on;
-    grid minor;
-
-    hold off;
-
-    legend('Interpreter', 'latex');
-
-    % Longitude measurement error
-
-    subplot(3, 4, 6);
-
-    hold on;
-
-    plot( ... 
-        simTime, ... 
-        abs(llaMeasDegKm(2, :) - llaRealDegKm(2, :)), ... 
-        'Color', 'b', ... 
-        'LineStyle', ':', ... 
-        'LineWidth', 2);
-
-    xlabel('Time [s]', 'Interpreter', 'latex');
-    ylabel('$\Delta $ Longitude [$^{\circ }$]', 'Interpreter', 'latex');
-    title('Longitude measurement error vs time', 'Interpreter', 'latex');
-
-    grid on;
-    grid minor;
-
-    hold off;
-
-    % Altitude
-
-    subplot(3, 4, 9);
-
-    hold on;
-
-    plot( ... 
-        simTime, ... 
-        llaRealDegKm(3, :), ... 
-        'Color', 'r', ... 
-        'LineStyle', ':', ... 
-        'LineWidth', 3.5, ... 
-        'DisplayName', 'Real');
-
-    plot( ... 
-        simTime, ... 
-        llaMeasDegKm (3, :), ... 
-        'Color', 'g', ... 
-        'LineStyle', '-', ... 
-        'LineWidth', 1.5, ... 
-        'DisplayName', 'Measured');
-
-    xlabel('Time [s]', 'Interpreter', 'latex');
-    ylabel('Altitude [km]', 'Interpreter', 'latex');
-    title('Altitude vs time', 'Interpreter', 'latex');
-
-    grid on;
-    grid minor;
-
-    hold off;
-
-    legend('Interpreter', 'latex');
-
-    % Altitude measurement error
-
-    subplot(3, 4, 10);
-
-    hold on;
-
-    plot( ... 
-        simTime, ... 
-        abs(llaMeasDegKm(3, :) - llaRealDegKm(3, :)), ... 
-        'Color', 'b', ... 
-        'LineStyle', ':', ... 
-        'LineWidth', 2);
-
-    xlabel('Time [s]', 'Interpreter', 'latex');
-    ylabel('$\Delta $ Altitude [km]', 'Interpreter', 'latex');
-    title('Altitude measurement error vs time', 'Interpreter', 'latex');
-
-    grid on;
-    grid minor;
-
-    hold off;
-
-    % Ground track
+        llaRealDegKm = [ ... 
+            posLLA(1:2, idFine) .* (180 / pi); ... 
+            posLLA(3, idFine) .* 1e-3];
     
-    subplot(3, 4, [3, 4, 7, 8, 11, 12]);
-
-    geoplot( ... 
-        llaRealDegKm(1, :), ... 
-        llaRealDegKm(2, :), ... 
-        'Color', 'r', ... 
-        'LineStyle', ':', ... 
-        'LineWidth', 3.5, ... 
-        'DisplayName', 'Real');
-
-    hold on;
-
-    geoplot( ... 
-        llaMeasDegKm(1, :), ... 
-        llaMeasDegKm(2, :), ... 
-        'Color', 'g', ... 
-        'LineStyle', '-', ... 
-        'LineWidth', 1.5, ... 
-        'DisplayName', 'Measured');
+        llaMeasDegKm = [ ... 
+            llaGNSS(1:2, idFine) .* (180 / pi); ... 
+            llaGNSS(3, idFine) .* 1e-3];
     
-    title('Ground track', 'Interpreter', 'latex');
+        % Plot
+        
+        % Latitude
+    
+        subplot(3, 4, 1);
+    
+        hold on;
+    
+        plot( ... 
+            simTime(idFine), ... 
+            llaRealDegKm(1, :), ... 
+            'Color', 'r', ... 
+            'LineStyle', ':', ... 
+            'LineWidth', 3.5, ... 
+            'DisplayName', 'Real');
+    
+        plot( ... 
+            simTime(idFine), ... 
+            llaMeasDegKm (1, :), ... 
+            'Color', 'g', ... 
+            'LineStyle', '-', ... 
+            'LineWidth', 1.5, ... 
+            'DisplayName', 'Measured');
 
-    hold off;
+        xlim([min(simTime), max(simTime)]);
 
-    legend('Interpreter', 'latex');
+        xlabel('Time [s]', 'Interpreter', 'latex');
+        ylabel('Latitude [$^{\circ }$]', 'Interpreter', 'latex');
+        title('Latitude vs time', 'Interpreter', 'latex');
+    
+        grid on;
+        grid minor;
+    
+        hold off;
+    
+        legend('Interpreter', 'latex');
+    
+        % Latitude measurement error
+    
+        subplot(3, 4, 2);
+    
+        hold on;
+    
+        plot( ... 
+            simTime(idFine), ... 
+            abs(llaMeasDegKm(1, :) - llaRealDegKm(1, :)), ... 
+            'Color', 'b', ... 
+            'LineStyle', ':', ... 
+            'LineWidth', 2);
 
-    geobasemap streets-dark
+        xlim([min(simTime), max(simTime)]);
+    
+        xlabel('Time [s]', 'Interpreter', 'latex');
+        ylabel('$\Delta $ Latitude [$^{\circ }$]', 'Interpreter', 'latex');
+        title('Latitude measurement error vs time', 'Interpreter', 'latex');
+    
+        grid on;
+        grid minor;
+    
+        hold off;
+    
+        % Longitude
+    
+        subplot(3, 4, 5);
+    
+        hold on;
+    
+        plot( ... 
+            simTime(idFine), ... 
+            llaRealDegKm(2, :), ... 
+            'Color', 'r', ... 
+            'LineStyle', ':', ... 
+            'LineWidth', 3.5, ... 
+            'DisplayName', 'Real');
+    
+        plot( ... 
+            simTime(idFine), ... 
+            llaMeasDegKm (2, :), ... 
+            'Color', 'g', ... 
+            'LineStyle', '-', ... 
+            'LineWidth', 1.5, ... 
+            'DisplayName', 'Measured');
+
+        xlim([min(simTime), max(simTime)]);
+
+        xlabel('Time [s]', 'Interpreter', 'latex');
+        ylabel('Longitude [$^{\circ }$]', 'Interpreter', 'latex');
+        title('Longitude vs time', 'Interpreter', 'latex');
+    
+        grid on;
+        grid minor;
+    
+        hold off;
+    
+        legend('Interpreter', 'latex');
+    
+        % Longitude measurement error
+    
+        subplot(3, 4, 6);
+    
+        hold on;
+    
+        plot( ... 
+            simTime(idFine), ... 
+            abs(llaMeasDegKm(2, :) - llaRealDegKm(2, :)), ... 
+            'Color', 'b', ... 
+            'LineStyle', ':', ... 
+            'LineWidth', 2);
+
+        xlim([min(simTime), max(simTime)]);
+    
+        xlabel('Time [s]', 'Interpreter', 'latex');
+        ylabel('$\Delta $ Longitude [$^{\circ }$]', 'Interpreter', 'latex');
+        title('Longitude measurement error vs time', 'Interpreter', 'latex');
+    
+        grid on;
+        grid minor;
+    
+        hold off;
+    
+        % Altitude
+    
+        subplot(3, 4, 9);
+    
+        hold on;
+    
+        plot( ... 
+            simTime(idFine), ... 
+            llaRealDegKm(3, :), ... 
+            'Color', 'r', ... 
+            'LineStyle', ':', ... 
+            'LineWidth', 3.5, ... 
+            'DisplayName', 'Real');
+    
+        plot( ... 
+            simTime(idFine), ... 
+            llaMeasDegKm (3, :), ... 
+            'Color', 'g', ... 
+            'LineStyle', '-', ... 
+            'LineWidth', 1.5, ... 
+            'DisplayName', 'Measured');
+
+        xlim([min(simTime), max(simTime)]);
+    
+        xlabel('Time [s]', 'Interpreter', 'latex');
+        ylabel('Altitude [km]', 'Interpreter', 'latex');
+        title('Altitude vs time', 'Interpreter', 'latex');
+    
+        grid on;
+        grid minor;
+    
+        hold off;
+    
+        legend('Interpreter', 'latex');
+    
+        % Altitude measurement error
+    
+        subplot(3, 4, 10);
+    
+        hold on;
+    
+        plot( ... 
+            simTime(idFine), ... 
+            abs(llaMeasDegKm(3, :) - llaRealDegKm(3, :)), ... 
+            'Color', 'b', ... 
+            'LineStyle', ':', ... 
+            'LineWidth', 2);
+
+        xlim([min(simTime), max(simTime)]);
+    
+        xlabel('Time [s]', 'Interpreter', 'latex');
+        ylabel('$\Delta $ Altitude [km]', 'Interpreter', 'latex');
+        title('Altitude measurement error vs time', 'Interpreter', 'latex');
+    
+        grid on;
+        grid minor;
+    
+        hold off;
+    
+        % Ground track
+        
+        subplot(3, 4, [3, 4, 7, 8, 11, 12]);
+    
+        geoplot( ... 
+            llaRealDegKm(1, :), ... 
+            llaRealDegKm(2, :), ... 
+            'Color', 'r', ... 
+            'LineStyle', ':', ... 
+            'LineWidth', 3.5, ... 
+            'DisplayName', 'Real');
+    
+        hold on;
+    
+        geoplot( ... 
+            llaMeasDegKm(1, :), ... 
+            llaMeasDegKm(2, :), ... 
+            'Color', 'g', ... 
+            'LineStyle', '-', ... 
+            'LineWidth', 1.5, ... 
+            'DisplayName', 'Measured');
+        
+        title('Ground track', 'Interpreter', 'latex');
+    
+        hold off;
+    
+        legend('Interpreter', 'latex');
+    
+        geobasemap streets-dark
+    
+    end
 
 end
 

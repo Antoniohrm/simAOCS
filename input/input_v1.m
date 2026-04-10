@@ -56,19 +56,19 @@ initTrueAnomaly = 0; % Initial true anomaly [º]
 
 initRoll = 45; % Initial roll angle [º]
 initPitch = 45; % Initial pitch angle [º]
-initYaw = 180; % Initial yaw angle [º]
+initYaw = 75; % Initial yaw angle [º]
 
 % initOmgX = 0; % Initial angular velocity in X (body) axis [ºs-1]
 % initOmgY = 0; % Initial angular velocity in Y (body) axis [ºs-1]
 % initOmgZ = 0; % Initial angular velocity in Z (body) axis [ºs-1]
 
-initOmgX = 2; % Initial angular velocity in X (body) axis [ºs-1]
-initOmgY = 2; % Initial angular velocity in Y (body) axis [ºs-1]
-initOmgZ = 2; % Initial angular velocity in Z (body) axis [ºs-1]
+% initOmgX = 2; % Initial angular velocity in X (body) axis [ºs-1]
+% initOmgY = 2; % Initial angular velocity in Y (body) axis [ºs-1]
+% initOmgZ = 2; % Initial angular velocity in Z (body) axis [ºs-1]
 
-% initOmgX = 10; % Initial angular velocity in X (body) axis [ºs-1]
-% initOmgY = 10; % Initial angular velocity in Y (body) axis [ºs-1]
-% initOmgZ = 10; % Initial angular velocity in Z (body) axis [ºs-1]
+initOmgX = 10; % Initial angular velocity in X (body) axis [ºs-1]
+initOmgY = 10; % Initial angular velocity in Y (body) axis [ºs-1]
+initOmgZ = 10; % Initial angular velocity in Z (body) axis [ºs-1]
 
 % Fuel mass
 
@@ -102,18 +102,18 @@ rwAllocationMatrix = [ ...
 % Specs of CubeSpace CubeWheel CW5000
 % https://www.cubespace.co.za/products/reaction-wheel/
 
-rwRpm4StoredH = 5200; % Angular velocity at the stored momentum [rpm]
-rwStoredH = 500; % Stored momentum @ "rwRpm4StoredH" angular velocity [mNms]
-rwMaxOmg = 8000; % Maximum angular velocity of the RW [rpm]
-rwMaxTorque = 37; % Maximum torque of the reaction wheels [mNm]
+% rwRpm4StoredH = 5200; % Angular velocity at the stored momentum [rpm]
+% rwStoredH = 500; % Stored momentum @ "rwRpm4StoredH" angular velocity [mNms]
+% rwMaxOmg = 8000; % Maximum angular velocity of the RW [rpm]
+% rwMaxTorque = 37; % Maximum torque of the reaction wheels [mNm]
 
 % Specs of CubeSpace CubeWheel CW10K0 (extrapolating from smaller models)
 % https://www.cubespace.co.za/products/reaction-wheel/
 
-% rwRpm4StoredH = 5200; % Angular velocity at the stored momentum [rpm]
-% rwStoredH = 1000; % Stored momentum @ "rwRpm4StoredH" angular velocity [mNms]
-% rwMaxOmg = 8000; % Maximum angular velocity of the RW [rpm]
-% rwMaxTorque = 50; % Maximum torque of the reaction wheels [mNm]
+rwRpm4StoredH = 5200; % Angular velocity at the stored momentum [rpm]
+rwStoredH = 1000; % Stored momentum @ "rwRpm4StoredH" angular velocity [mNms]
+rwMaxOmg = 8000; % Maximum angular velocity of the RW [rpm]
+rwMaxTorque = 50; % Maximum torque of the reaction wheels [mNm]
 
 %% Actuators - Magnetorquers (MTQ)
 % Specs of CubeSpace CubeTorquer CR0200
@@ -233,8 +233,7 @@ initMode = 1; % Initial mode
 
 omgBodSafeTH = 3; % Body angular velocity threshold to trigger safe mode [ºs-1]
 omgRwDesaturationTH = 0.9; % RW angular velocity threshold to trigger desaturation [frac of max RW omg]
-% omgRwDesaturationTH = 1.1; % RW angular velocity threshold to trigger desaturation [frac of max RW omg]
-omgRwDesaturationEndTH = 0.25; % RW angular velocity threshold to exit desaturation [frac of max RW omg]
+omgRwDesaturationEndTH = 0.5; % RW angular velocity threshold to exit desaturation [frac of max RW omg]
 
 %% GNC - Navigation
 
@@ -256,7 +255,7 @@ desatK = 1e5; % Gain for the Bdot desaturation law
 %% GNC - Control - Fine pointing
 
 % Gains
-% Phase margin: 60º @ 50.1 rads-1
+% Phase margin: 60º @ s0.1 rads-1
 
 finePointKp = 0.0231417031731008; % Proportional gain
 finePointKd = 1.73267405547584; % Derivative gain
