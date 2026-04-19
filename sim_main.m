@@ -44,8 +44,7 @@ simModel = 'SIM_MDL'; % Name of the main simulator Simulink model
 
 inputFile = 'input_v1'; % Name of the file with the inputs
 
-% resName0 = 'Res_test'; % Name of the results
-resName0 = 'Res_Detumbling_Desaturation_Pointing_270min';
+resName0 = 'Res_test'; % Name of the results';
 
 % saveRes = false; % Flag to signal whether to save the simulation results
 saveRes = true; % Flag to signal whether to save the simulation results

@@ -7,7 +7,7 @@ function [] = postpro_gnc(resName)
 %% Identify whether it is a MC run
 
 resContents = dir(strcat('results/', resName));
-resContents = resContents(~ismember({resContents.name}, {'.', '..'}));
+resContents = resContents(~ismember({resContents.name}, {'.', '..', '.DS_Store'}));
 
 if length(resContents) == 1
     isMC = false;
@@ -42,7 +42,7 @@ for ii = 1:numel(tabNames)
     tabs{ii} = uitab( ... 
         tabGroup, ... 
         'Title', tabNames{ii}, ... 
-        'BackgroundColor', 'k');
+        'BackgroundColor', 'w');
 
 end
 

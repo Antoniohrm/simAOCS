@@ -32,4 +32,4 @@ Single shot (not Monte Carlo campaings) are supported via the *sim_singleShot.m*
 
 The simulator requires several toolbox and blocksets.
 
-**DISCLAIMER: This simulator is intended for educational purposes, and no guarantees regarding the modelling or GNC design and performance are granted**
+**DISCLAIMER: This simulator is intended for educational purposes, and no guarantees regarding the modelling or GNC design and performance are provided**
