@@ -420,32 +420,7 @@ else
     rweUpdateFreq; % Reading frequency of the RWE [Hz]
 end
 
-%% GNC - Modes
-
-simData.gnc.modes.modeIds = ... 
-    modeIds; % Mode identifiers
-
-simData.gnc.modes.initMode = ... 
-    initMode; % Initial mode
-
-simData.gnc.modes.omgBodSafeTH = ... 
-    omgBodSafeTH * (pi / 180); % Body angular velocity threshold to trigger safe mode [rads-1]
-
-simData.gnc.modes.omgRwDesaturationTH = ... 
-    omgRwDesaturationTH; % RW angular velocity threshold to trigger desaturation [frac of max RW omg]
-
-simData.gnc.modes.omgRwDesaturationEndTH = ... 
-    omgRwDesaturationEndTH; % RW angular velocity threshold to exit desaturation [frac of max RW omg]
-
-%% GNC - Navigation
-
-simData.gnc.nav.fineNavMode = ... 
-    fineNavMode; % Fine navigation algorithm
-
-%% GNC - Guidance
-
-simData.gnc.gui.targetAttEci = ... 
-    targetAttEci; % Attitude w.r.t ECI to track in pointing mode
+%% GNC - Execute prepro here
 
 %% GNC - Control - Vehicle parameters
 % The vehicle parameters are duplicated in the simData structure to enable
@@ -499,24 +474,6 @@ simData.gnc.act.rwMaxTorque = ...
 simData.gnc.act.rwMaxOmg = ... 
     (rwMaxOmg * (pi / 30)) .* ones(3, 1); % Maximum angular velocity of the RW (column vector) [rads-1]
 
-%% GNC - Control - Desaturation
-
-simData.gnc.con.desatK = ... 
-    desatK; % Gain for the Bdot desaturation law
-
-%% GNC - Control - Fine pointing
-
-% Gains
-
-simData.gnc.con.finePointKp = ... 
-    finePointKp; % Proportional gain for the fine pointing
-
-simData.gnc.con.finePointKd = ... 
-    finePointKd; % Derivative gain for the fine pointing
-
-simData.gnc.con.finePointKn = ... 
-    finePointKn; % Filter coefficient for the fine pointing
-
 %% Assemble initial state bus
 % (Must match the field names, dimensions and data types in "state_bus"
 
@@ -534,13 +491,5 @@ simData.ic.initBus = struct( ...
     'inertia', simData.massProperties.fullInertia, ... 
     'timeStampPosix', simData.ic.initTimeUTCPosix, ... 
     'timeStampJulian', simData.ic.initTimeJulian);
-
-%% Assemble initial GNC bus
-% (Must match the field names, dimensions and data types in "gnc_bus"
-
-simData.gnc.ic.initBus = struct( ... 
-    'rwTorqueCmd', zeros(3, 1), ... 
-    'mtqVoltageCmd', zeros(3, 1), ... 
-    'rcsThrustCmd', zeros(12, 1));
 
 end

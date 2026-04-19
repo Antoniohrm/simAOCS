@@ -219,44 +219,7 @@ rweUpdateFreq = -1; % Reading frequency of the RWE [Hz]
 mainSeed = 23340; % Main seed for the simulation
 seedsMax = 50000; % Max values for random seeds
 
-%% GNC - Modes
-
-% Note: The mode IDs names shall be defined as strings (delimited by "),
-% not as character arrays (delimited by ') for postprocessing purposes
-
-modeIds = { ... 
-    "Safe", 1; ... 
-    "Desaturation", 2; ... 
-    "Science", 3}; % Mode ids, first column are names (postpro), second column are IDs
-
-initMode = 1; % Initial mode
-
-omgBodSafeTH = 3; % Body angular velocity threshold to trigger safe mode [ºs-1]
-omgRwDesaturationTH = 0.9; % RW angular velocity threshold to trigger desaturation [frac of max RW omg]
-omgRwDesaturationEndTH = 0.5; % RW angular velocity threshold to exit desaturation [frac of max RW omg]
-
-%% GNC - Navigation
-
-% Fine navigation algorithm
-% Currently supports only STR and STR + GYR propagation between STR updates
-
-% fineNavMode = 1; % Only update Eci2Body attitude from the STR measurements
-fineNavMode = 2; % Propagate attitude with the gyro measurements between STR updates
-
-%% GNC - Guidance
-
-% Observation target
-targetAttEci = [0; 0; 0; 1]; % Attitude w.r.t ECI to track in pointing mode
-
-%% GNC - Desaturation
-
-desatK = 1e5; % Gain for the Bdot desaturation law
-
-%% GNC - Control - Fine pointing
-
-% Gains
-% Phase margin: 60º @ s0.1 rads-1
-
-finePointKp = 0.0231417031731008; % Proportional gain
-finePointKd = 1.73267405547584; % Derivative gain
-finePointKn = 11.428279760416; % Filter coefficient
+%% GNC - Declare GNC inputs here
+% Currently, for the sake of simplicity, the vehicle parameters loaded into
+% the gncData.gnc database are directly taken from the nominal values in
+% the rest of simData
