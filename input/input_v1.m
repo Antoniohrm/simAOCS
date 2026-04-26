@@ -50,21 +50,9 @@ initTrueAnomaly = 0; % Initial true anomaly [º]
 
 % Rotational state
 
-% initRoll = 2; % Initial roll angle [º]
-% initPitch = 2; % Initial pitch angle [º]
-% initYaw = 2; % Initial yaw angle [º]
-
 initRoll = 45; % Initial roll angle [º]
 initPitch = 45; % Initial pitch angle [º]
 initYaw = 75; % Initial yaw angle [º]
-
-% initOmgX = 0; % Initial angular velocity in X (body) axis [ºs-1]
-% initOmgY = 0; % Initial angular velocity in Y (body) axis [ºs-1]
-% initOmgZ = 0; % Initial angular velocity in Z (body) axis [ºs-1]
-
-% initOmgX = 2; % Initial angular velocity in X (body) axis [ºs-1]
-% initOmgY = 2; % Initial angular velocity in Y (body) axis [ºs-1]
-% initOmgZ = 2; % Initial angular velocity in Z (body) axis [ºs-1]
 
 initOmgX = 10; % Initial angular velocity in X (body) axis [ºs-1]
 initOmgY = 10; % Initial angular velocity in Y (body) axis [ºs-1]
