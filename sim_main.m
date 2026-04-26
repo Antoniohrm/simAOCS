@@ -44,7 +44,7 @@ simModel = 'SIM_MDL'; % Name of the main simulator Simulink model
 
 inputFile = 'input_v1'; % Name of the file with the inputs
 
-resName0 = 'Res_test'; % Name of the results';
+resName0 = 'Desat_90min_2'; % Name of the results';
 
 % saveRes = false; % Flag to signal whether to save the simulation results
 saveRes = true; % Flag to signal whether to save the simulation results
@@ -54,7 +54,7 @@ owRes = false; % Flag to signal whether to overwrite results if "resName" alread
 
 % Simulation
 
-simTimeSpan = 60 * 10; % Simulation time span [s]
+simTimeSpan = 60 * 90; % Simulation time span [s]
 
 %% Initialize simulation
 

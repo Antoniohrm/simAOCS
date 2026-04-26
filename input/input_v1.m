@@ -58,17 +58,17 @@ initRoll = 45; % Initial roll angle [º]
 initPitch = 45; % Initial pitch angle [º]
 initYaw = 75; % Initial yaw angle [º]
 
-% initOmgX = 0; % Initial angular velocity in X (body) axis [ºs-1]
-% initOmgY = 0; % Initial angular velocity in Y (body) axis [ºs-1]
-% initOmgZ = 0; % Initial angular velocity in Z (body) axis [ºs-1]
+initOmgX = 0; % Initial angular velocity in X (body) axis [ºs-1]
+initOmgY = 0; % Initial angular velocity in Y (body) axis [ºs-1]
+initOmgZ = 0; % Initial angular velocity in Z (body) axis [ºs-1]
 
 % initOmgX = 2; % Initial angular velocity in X (body) axis [ºs-1]
 % initOmgY = 2; % Initial angular velocity in Y (body) axis [ºs-1]
 % initOmgZ = 2; % Initial angular velocity in Z (body) axis [ºs-1]
 
-initOmgX = 10; % Initial angular velocity in X (body) axis [ºs-1]
-initOmgY = 10; % Initial angular velocity in Y (body) axis [ºs-1]
-initOmgZ = 10; % Initial angular velocity in Z (body) axis [ºs-1]
+% initOmgX = 10; % Initial angular velocity in X (body) axis [ºs-1]
+% initOmgY = 10; % Initial angular velocity in Y (body) axis [ºs-1]
+% initOmgZ = 10; % Initial angular velocity in Z (body) axis [ºs-1]
 
 % Fuel mass
 
@@ -170,8 +170,11 @@ rcsMaxMdot = 0.0017; % RCS maximum mass flow rate [kgs-1]
 %% Actuators - Initial states
 % MTQ and RCS assumed to be initialized at 0 output
 
+% rwInitOmg = ... 
+%     [0; 0; 0]; % Initial angular velocities of the RW [rpm]
+
 rwInitOmg = ... 
-    [0; 0; 0]; % Initial angular velocities of the RW [rpm]
+    [7201; 7201; 7201]; % Initial angular velocities of the RW [rpm]
 
 %% Sensors - Gyroscope (GYR)
 
